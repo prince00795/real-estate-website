@@ -117,6 +117,8 @@ const Home = () => {
             <option value="Bangalore">Bangalore</option>
             <option value="Pune">Pune</option>
             <option value="Hyderabad">Hyderabad</option>
+             
+
           </select>
 
           <button

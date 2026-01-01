@@ -49,7 +49,7 @@ const PostProperty = () => {
             </p>
 
             <ul className="space-y-3 text-gray-700">
-              <li>✔ Zero Brokerage</li>
+              <li>✔ Zero  Brokerage</li>
               <li>✔ Direct owner-to-buyer contact</li>
               <li>✔ Faster responses</li>
             </ul>
