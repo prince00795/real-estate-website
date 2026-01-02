@@ -28,6 +28,49 @@ const properties = [
     price: 3200000,
     type: "Flat",
   },
+  {
+    id: 1,
+    title: "2 BHK Apartment",
+    location: "Bangalore",
+    price: 5500000,
+    type: "Apartment",
+  },
+  {
+    id: 2,
+    title: "3 BHK Villa",
+    location: "Hyderabad",
+    price: 8200000,
+    type: "Villa",
+  },
+  {
+    id: 3,
+    title: "1 BHK Flat",
+    location: "Pune",
+    price: 3200000,
+    type: "Flat",
+  },
+  {
+    id: 1,
+    title: "2 BHK Apartment",
+    location: "Bangalore",
+    price: 5500000,
+    type: "Apartment",
+  },
+  {
+    id: 2,
+    title: "3 BHK Villa",
+    location: "Hyderabad",
+    price: 8200000,
+    type: "Villa",
+  },
+  {
+    id: 3,
+    title: "1 BHK Flat",
+    location: "Pune",
+    price: 3200000,
+    type: "Flat",
+  },
+  
 ];
 
 

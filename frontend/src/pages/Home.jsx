@@ -152,50 +152,53 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ================= FEATURED PROPERTIES ================= */}
-      <div className="py-16 bg-gray-100">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold">
-              Featured Properties
-            </h2>
-            <button
-              onClick={() => navigate("/buy")}
-              className="text-blue-600 hover:underline"
-            >
-              View All
-            </button>
+      {/* ================= FEATURED PROPERTIES (SLIDER) ================= */}
+<div className="py-16 bg-gray-100">
+  <div className="max-w-6xl mx-auto px-6">
+    <div className="flex justify-between items-center mb-8">
+      <h2 className="text-3xl font-bold">
+        Featured Properties
+      </h2>
+      <button
+        onClick={() => navigate("/buy")}
+        className="text-blue-600 hover:underline"
+      >
+        View All
+      </button>
+    </div>
+
+    {/* Slider */}
+    <div className="slider-container">
+      <div className="slider-track">
+        {[...featuredProperties, ...featuredProperties].map((p, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden mr-6 w-72 flex-shrink-0"
+          >
+            {/* Image Placeholder */}
+            <div className="h-40 bg-gray-300 flex items-center justify-center">
+              <span className="text-gray-600 text-sm">
+                Property Image
+              </span>
+            </div>
+
+            <div className="p-4">
+              <span className="inline-block text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mb-2">
+                {p.type}
+              </span>
+
+              <h3 className="font-semibold">{p.title}</h3>
+              <p className="text-gray-600 text-sm">{p.location}</p>
+              <p className="text-blue-600 font-bold mt-2">
+                ₹{p.price.toLocaleString()}
+              </p>
+            </div>
           </div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {featuredProperties.map((p) => (
-              <div
-                key={p.id}
-                className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden"
-              >
-                {/* Image Placeholder */}
-                <div className="h-40 bg-gray-300 flex items-center justify-center">
-                  <span className="text-gray-600 text-sm">
-                    Property Image
-                  </span>
-                </div>
-
-                <div className="p-4">
-                  <span className="inline-block text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mb-2">
-                    {p.type}
-                  </span>
-
-                  <h3 className="font-semibold">{p.title}</h3>
-                  <p className="text-gray-600 text-sm">{p.location}</p>
-                  <p className="text-blue-600 font-bold mt-2">
-                    ₹{p.price.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
+    </div>
+  </div>
+</div>
 
       {/* ================= FINAL CTA ================= */}
       <div className="bg-blue-600 text-white py-16 text-center">
