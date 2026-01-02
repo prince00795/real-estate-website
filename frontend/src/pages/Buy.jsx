@@ -111,8 +111,8 @@ const Buy = () => {
         {/* Properties */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProperties.length > 0 ? (
-            filteredProperties.map((property) => (
-              <PropertyCard key={property.id} property={property} />
+            filteredProperties.map((property, index) => (
+              <PropertyCard  key={`${property.id}-${index}`} property={property} />
             ))
           ) : (
             <p className="text-gray-500">No properties found</p>

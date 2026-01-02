@@ -172,9 +172,11 @@ const Home = () => {
       <div className="slider-track">
         {[...featuredProperties, ...featuredProperties].map((p, index) => (
           <div
-            key={index}
-            className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden mr-6 w-72 flex-shrink-0"
-          >
+  key={`${p.id}-${index}`}
+  onClick={() => navigate(`/property/${p.id}`)}
+  className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden mr-6 w-72 flex-shrink-0 cursor-pointer"
+>
+
             {/* Image Placeholder */}
             <div className="h-40 bg-gray-300 flex items-center justify-center">
               <span className="text-gray-600 text-sm">
