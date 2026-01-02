@@ -1,25 +1,28 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
- 
+
 const featuredProperties = [
   {
     id: 1,
     title: "2 BHK Apartment",
     location: "Pune",
     price: 3200000,
+    type: "Apartment",
   },
   {
     id: 2,
     title: "3 BHK Villa",
     location: "Bangalore",
     price: 8200000,
+    type: "Villa",
   },
   {
     id: 3,
     title: "1 BHK Flat",
     location: "Hyderabad",
     price: 2800000,
+    type: "Flat",
   },
 ];
 
@@ -149,49 +152,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ================= WHY CHOOSE US ================= */}
-      <div className="py-16 bg-gray-100">
-        <h2 className="text-3xl font-bold text-center mb-10">
-          Why Choose Us
-        </h2>
-
-        <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-6 px-6 text-center">
-          {["Zero Brokerage", "Verified Owners", "Fast Response", "Local Experts"].map(
-            (item, index) => (
-              <div key={index} className="bg-white p-6 rounded shadow">
-                <h3 className="font-semibold">{item}</h3>
-              </div>
-            )
-          )}
-        </div>
-      </div>
-
-      {/* ================= HOW IT WORKS ================= */}
-      <div className="py-16 bg-white text-center">
-        <h2 className="text-3xl font-bold mb-10">How It Works</h2>
-
-        <div className="max-w-5xl mx-auto grid md:grid-cols-3 gap-8 px-6">
-          <div>
-            <h3 className="font-semibold mb-2">1. Post Property</h3>
-            <p className="text-gray-600 text-sm">
-              Share basic details for free
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">2. Get Calls</h3>
-            <p className="text-gray-600 text-sm">
-              Buyers contact you directly
-            </p>
-          </div>
-          <div>
-            <h3 className="font-semibold mb-2">3. Close Deal</h3>
-            <p className="text-gray-600 text-sm">
-              Finalize without brokerage
-            </p>
-          </div>
-        </div>
-      </div>
-
       {/* ================= FEATURED PROPERTIES ================= */}
       <div className="py-16 bg-gray-100">
         <div className="max-w-6xl mx-auto px-6">
@@ -209,12 +169,28 @@ const Home = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             {featuredProperties.map((p) => (
-              <div key={p.id} className="bg-white p-4 rounded shadow">
-                <h3 className="font-semibold">{p.title}</h3>
-                <p className="text-gray-600 text-sm">{p.location}</p>
-                <p className="text-blue-600 font-bold mt-2">
-                  ₹{p.price.toLocaleString()}
-                </p>
+              <div
+                key={p.id}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden"
+              >
+                {/* Image Placeholder */}
+                <div className="h-40 bg-gray-300 flex items-center justify-center">
+                  <span className="text-gray-600 text-sm">
+                    Property Image
+                  </span>
+                </div>
+
+                <div className="p-4">
+                  <span className="inline-block text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mb-2">
+                    {p.type}
+                  </span>
+
+                  <h3 className="font-semibold">{p.title}</h3>
+                  <p className="text-gray-600 text-sm">{p.location}</p>
+                  <p className="text-blue-600 font-bold mt-2">
+                    ₹{p.price.toLocaleString()}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
