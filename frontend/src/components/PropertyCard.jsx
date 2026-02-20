@@ -3,14 +3,24 @@ import { Link } from "react-router-dom";
 
 const PropertyCard = ({ property }) => {
   return (
-    <Link to={`/property/${property.id}`}>
+    <Link to={`/property/${property._id}`}>
       <div className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden cursor-pointer">
         
-        {/* Image Placeholder */}
-        <div className="h-44 bg-gray-300 flex items-center justify-center">
-          <span className="text-gray-600 text-sm">
-            Property Image
-          </span>
+        {/* Real Image */}
+        <div className="h-44 bg-gray-300 overflow-hidden">
+          {property.images && property.images.length > 0 ? (
+            <img
+              src={property.images[0].url}
+              alt={property.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="h-full flex items-center justify-center">
+              <span className="text-gray-600 text-sm">
+                No Image
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="p-4">
@@ -27,7 +37,7 @@ const PropertyCard = ({ property }) => {
           </p>
 
           <p className="text-blue-600 font-bold mt-2">
-            ₹{property.price.toLocaleString()}
+            ₹{Number(property.price).toLocaleString()}
           </p>
         </div>
       </div>

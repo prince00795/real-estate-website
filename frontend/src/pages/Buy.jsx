@@ -1,83 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import SearchBar from "../components/Searchbar";
 import PropertyCard from "../components/PropertyCard";
 import PriceFilter from "../components/PriceFilter";
-  
- 
-
-const properties = [
-  {
-    id: 1,
-    title: "2 BHK Apartment",
-    location: "Bangalore",
-    price: 5500000,
-    type: "Apartment",
-  },
-  {
-    id: 2,
-    title: "3 BHK Villa",
-    location: "Hyderabad",
-    price: 8200000,
-    type: "Villa",
-  },
-  {
-    id: 3,
-    title: "1 BHK Flat",
-    location: "Pune",
-    price: 3200000,
-    type: "Flat",
-  },
-  {
-    id: 1,
-    title: "2 BHK Apartment",
-    location: "Bangalore",
-    price: 5500000,
-    type: "Apartment",
-  },
-  {
-    id: 2,
-    title: "3 BHK Villa",
-    location: "Hyderabad",
-    price: 8200000,
-    type: "Villa",
-  },
-  {
-    id: 3,
-    title: "1 BHK Flat",
-    location: "Pune",
-    price: 3200000,
-    type: "Flat",
-  },
-  {
-    id: 1,
-    title: "2 BHK Apartment",
-    location: "Bangalore",
-    price: 5500000,
-    type: "Apartment",
-  },
-  {
-    id: 2,
-    title: "3 BHK Villa",
-    location: "Hyderabad",
-    price: 8200000,
-    type: "Villa",
-  },
-  {
-    id: 3,
-    title: "1 BHK Flat",
-    location: "Pune",
-    price: 3200000,
-    type: "Flat",
-  },
-  
-];
-
 
 const Buy = () => {
+  const [properties, setProperties] = useState([]);
   const [search, setSearch] = useState("");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:8000/api/properties"
+        );
+        setProperties(res.data.properties);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProperties();
+  }, []);
 
   const filteredProperties = properties.filter((p) => {
     const matchLocation = p.location
@@ -97,10 +44,8 @@ const Buy = () => {
       <div className="min-h-screen bg-gray-100 p-6">
         <h1 className="text-2xl font-bold mb-6">Buy Property</h1>
 
-        {/* Search */}
         <SearchBar search={search} setSearch={setSearch} />
 
-        {/* Price Filter */}
         <PriceFilter
           minPrice={minPrice}
           maxPrice={maxPrice}
@@ -108,14 +53,18 @@ const Buy = () => {
           setMaxPrice={setMaxPrice}
         />
 
-        {/* Properties */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProperties.length > 0 ? (
-            filteredProperties.map((property, index) => (
-              <PropertyCard  key={`${property.id}-${index}`} property={property} />
+            filteredProperties.map((property) => (
+              <PropertyCard
+                key={property._id}
+                property={property}
+              />
             ))
           ) : (
-            <p className="text-gray-500">No properties found</p>
+            <p className="text-gray-500">
+              No properties found
+            </p>
           )}
         </div>
       </div>

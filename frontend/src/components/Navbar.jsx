@@ -39,7 +39,7 @@ const Navbar = () => {
         </Link>
 
         <Link
-          to="/login"
+          to="/admin/login"
           className="hover:text-blue-600"
         >
           Login
