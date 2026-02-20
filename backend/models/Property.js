@@ -18,11 +18,12 @@ const propertySchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-      images: [
-    {
-      type: String,
-    },
-  ],
+    images: [
+  {
+    url: String,
+    public_id: String,
+  },
+],
 
     description: {
       type: String,

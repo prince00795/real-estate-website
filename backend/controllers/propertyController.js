@@ -1,18 +1,35 @@
 const Property = require("../models/Property");
 const cloudinary = require("../config/cloudinary");
 
+// ================= GET ALL PROPERTIES (With Pagination) =================
 
-// GET ALL PROPERTIES
 const getProperties = async (req, res) => {
   try {
-    const properties = await Property.find();
-    res.json(properties);
+    const page = Number(req.query.page) || 1;
+    const limit = 6;
+    const skip = (page - 1) * limit;
+
+    const total = await Property.countDocuments();
+
+    const properties = await Property.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      page,
+      totalPages: Math.ceil(total / limit),
+      total,
+      properties,
+    });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// GET SINGLE PROPERTY
+
+// ================= GET SINGLE PROPERTY =================
 const getPropertyById = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
@@ -22,27 +39,29 @@ const getPropertyById = async (req, res) => {
     }
 
     res.json(property);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// CREATE PROPERTY
 
+// ================= CREATE PROPERTY (With Images) =================
 const createProperty = async (req, res) => {
   try {
-    const imageUrls = [];
+    let images = [];
 
     if (req.files && req.files.length > 0) {
       for (const file of req.files) {
         const result = await cloudinary.uploader.upload(
           `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
-          {
-            folder: "real-estate-properties",
-          }
+          { folder: "real-estate-properties" }
         );
 
-        imageUrls.push(result.secure_url);
+        images.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
       }
     }
 
@@ -52,7 +71,7 @@ const createProperty = async (req, res) => {
       price: req.body.price,
       type: req.body.type,
       description: req.body.description,
-      images: imageUrls,
+      images,
     });
 
     res.status(201).json(property);
@@ -63,9 +82,7 @@ const createProperty = async (req, res) => {
 };
 
 
-
-
-// UPDATE PROPERTY
+// ================= UPDATE PROPERTY (Replace Images) =================
 const updateProperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
@@ -74,21 +91,49 @@ const updateProperty = async (req, res) => {
       return res.status(404).json({ message: "Property not found" });
     }
 
+    // Update text fields
     property.title = req.body.title || property.title;
     property.location = req.body.location || property.location;
     property.price = req.body.price || property.price;
     property.type = req.body.type || property.type;
     property.description = req.body.description || property.description;
 
+    // If new images uploaded
+    if (req.files && req.files.length > 0) {
+
+      // Delete old images from Cloudinary
+      for (const image of property.images) {
+        await cloudinary.uploader.destroy(image.public_id);
+      }
+
+      let newImages = [];
+
+      for (const file of req.files) {
+        const result = await cloudinary.uploader.upload(
+          `data:${file.mimetype};base64,${file.buffer.toString("base64")}`,
+          { folder: "real-estate-properties" }
+        );
+
+        newImages.push({
+          url: result.secure_url,
+          public_id: result.public_id,
+        });
+      }
+
+      property.images = newImages;
+    }
+
     const updatedProperty = await property.save();
 
     res.json(updatedProperty);
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// DELETE PROPERTY
+
+// ================= DELETE PROPERTY (Delete Cloudinary Images) =================
 const deleteProperty = async (req, res) => {
   try {
     const property = await Property.findById(req.params.id);
@@ -97,13 +142,20 @@ const deleteProperty = async (req, res) => {
       return res.status(404).json({ message: "Property not found" });
     }
 
+    // Delete images from Cloudinary
+    for (const image of property.images) {
+      await cloudinary.uploader.destroy(image.public_id);
+    }
+
     await property.deleteOne();
 
     res.json({ message: "Property deleted successfully" });
+
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = {
   getProperties,
