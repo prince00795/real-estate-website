@@ -10,6 +10,11 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminAddProperty from "./pages/AdminAddProperty";
 import AdminEditProperty from "./pages/AdminEditProperty";
 
+import AdminProperties from "./pages/AdminProperties";
+import AdminBuyerLeads from "./pages/AdminBuyerLeads";
+import AdminSellerLeads from "./pages/AdminSellerLeads";
+import AdminLeadsToday from "./pages/AdminLeadsToday";
+
 function App() {
   return (
     <BrowserRouter>
@@ -23,6 +28,11 @@ function App() {
         <Route path="/admin/dashboard" element={<AdminDashboard />} />
         <Route path="/admin/add" element={<AdminAddProperty />} />
         <Route path="/admin/edit/:id" element={<AdminEditProperty />} />
+
+        <Route path="/admin/properties" element={<AdminProperties />} />
+        <Route path="/admin/buyer-leads" element={<AdminBuyerLeads />} />
+        <Route path="/admin/seller-leads" element={<AdminSellerLeads />} />
+        <Route path="/admin/leads-today" element={<AdminLeadsToday />} />
 
       </Routes>
     </BrowserRouter>

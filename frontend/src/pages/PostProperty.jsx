@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import Navbar from "../components/Navbar";
+import axios from "axios";
 
 const PostProperty = () => {
   const [formData, setFormData] = useState({
@@ -15,12 +16,16 @@ const PostProperty = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    console.log("Posted Property:", formData);
+  try {
+    await axios.post(
+      "http://localhost:8000/api/seller-leads",
+      formData
+    );
 
-    alert("Property submitted successfully! We will contact you.");
+    alert("Thanks! Our team will contact you shortly.");
 
     setFormData({
       name: "",
@@ -29,7 +34,11 @@ const PostProperty = () => {
       propertyType: "Apartment",
       purpose: "Rent",
     });
-  };
+
+  } catch (error) {
+    alert("Something went wrong",error);
+  }
+};
 
   return (
     <>
@@ -72,15 +81,21 @@ const PostProperty = () => {
                 className="w-full border p-2 rounded"
               />
 
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Mobile Number"
-                value={formData.phone}
-                onChange={handleChange}
-                required
-                className="w-full border p-2 rounded"
-              />
+               <input
+                  type="tel"
+                    name="phone"
+                    placeholder="Phone Number"
+                    required
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    className="w-full border p-2 rounded"
+                    onChange={handleChange}
+                     
+                    onInvalid={(e) =>
+                      e.target.setCustomValidity("Please enter a valid 10 digit number")
+                    }
+                    onInput={(e) => e.target.setCustomValidity("")}
+                />
 
               <input
                 type="text"

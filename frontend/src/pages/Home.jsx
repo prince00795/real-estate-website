@@ -1,75 +1,73 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
-import axios from "axios"
-
-const featuredProperties = [
-  {
-    id: 1,
-    title: "2 BHK Apartment",
-    location: "Pune",
-    price: 3200000,
-    type: "Apartment",
-  },
-  {
-    id: 2,
-    title: "3 BHK Villa",
-    location: "Bangalore",
-    price: 8200000,
-    type: "Villa",
-  },
-  {
-    id: 3,
-    title: "1 BHK Flat",
-    location: "Hyderabad",
-    price: 2800000,
-    type: "Flat",
-  },
-];
+import axios from "axios";
 
 const Home = () => {
   const navigate = useNavigate();
 
+  const [featuredProperties, setFeaturedProperties] = useState([]);
   const [showForm, setShowForm] = useState(true);
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
     city: "",
   });
 
-  const [exploreCity, setExploreCity] = useState("");
+   
+
+  // ✅ Fetch real properties
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:8000/api/properties"
+        );
+
+        setFeaturedProperties(res.data.properties); // because backend returns { properties: [...] }
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchProperties();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-// whatsapp feature
+
+  // WhatsApp + Lead Save
   const handleSubmit = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    // 1️⃣ Save lead in database
-    await axios.post("http://localhost:8000/api/leads", formData);
+    try {
+      await axios.post(
+        "http://localhost:8000/api/leads",
+        formData
+      );
 
-    // 2️⃣ Create WhatsApp message
-    const message = `
+      const message = `
 Hi, I am ${formData.name}.
 I am from ${formData.city}.
 My phone number is ${formData.phone}.
 I am interested in your property services.
-    `;
+      `;
 
-    const encodedMessage = encodeURIComponent(message);
+      const encodedMessage = encodeURIComponent(message);
+      const whatsappNumber = "919955813612";
 
-    // 🔥 REPLACE THIS WITH CLIENT NUMBER
-    const whatsappNumber = "919955813612";
+      window.open(
+        `https://wa.me/${whatsappNumber}?text=${encodedMessage}`,
+        "_blank"
+      );
 
-    // 3️⃣ Redirect to WhatsApp
-    window.location.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-
-  } catch (error) {
-    alert("Something went wrong. Please try again.",error);
-  }
-};
+    } catch (error) {
+      alert("Something went wrong. Please try again.",error);
+    }
+  };
 
   return (
     <>
@@ -78,8 +76,7 @@ I am interested in your property services.
       {/* ================= HERO + CONTACT ================= */}
       <div className="bg-gray-100 py-20">
         <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 px-6">
-          
-          {/* LEFT CONTENT */}
+
           <div>
             <h1 className="text-4xl font-bold mb-4">
               Sell or Rent your Property for Free
@@ -99,7 +96,6 @@ I am interested in your property services.
             </button>
           </div>
 
-          {/* RIGHT CONTACT FORM */}
           {showForm && (
             <div className="bg-white p-6 rounded shadow">
               <h2 className="text-xl font-semibold mb-4">
@@ -118,18 +114,13 @@ I am interested in your property services.
 
                 <input
                   type="tel"
-                    name="phone"
-                    placeholder="Phone Number"
-                    required
-                    pattern="[0-9]{10}"
-                    maxLength="10"
-                    className="w-full border p-2 rounded"
-                    onChange={handleChange}
-                     
-                    onInvalid={(e) =>
-                      e.target.setCustomValidity("Please enter a valid 10 digit number")
-                    }
-                    onInput={(e) => e.target.setCustomValidity("")}
+                  name="phone"
+                  placeholder="Phone Number"
+                  required
+                  pattern="[0-9]{10}"
+                  maxLength="10"
+                  className="w-full border p-2 rounded"
+                  onChange={handleChange}
                 />
 
                 <input
@@ -153,83 +144,63 @@ I am interested in your property services.
         </div>
       </div>
 
-      {/* ================= EXPLORE PROPERTY ================= */}
-      <div className="py-16 bg-white">
-        <div className="max-w-xl mx-auto text-center px-6">
-          <h2 className="text-2xl font-bold mb-4">
-            Explore Properties
-          </h2>
+      {/* ================= FEATURED PROPERTIES ================= */}
+      <div className="py-16 bg-gray-100">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold">
+              Featured Properties
+            </h2>
 
-          <select
-            value={exploreCity}
-            onChange={(e) => setExploreCity(e.target.value)}
-            className="w-full border p-3 rounded mb-4"
-          >
-            <option value="">Select City</option>
-            <option value="Bangalore">Bangalore</option>
-            <option value="Pune">Pune</option>
-            <option value="Hyderabad">Hyderabad</option>
-          </select>
+            <button
+              onClick={() => navigate("/buy")}
+              className="text-blue-600 hover:underline"
+            >
+              View All
+            </button>
+          </div>
 
-          <button
-            onClick={() => navigate(`/buy?city=${exploreCity}`)}
-            disabled={!exploreCity}
-            className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 disabled:opacity-50"
-          >
-            Explore Properties
-          </button>
-        </div>
-      </div>
+          <div className="slider-container">
+            <div className="slider-track">
+              {[...featuredProperties, ...featuredProperties].map((p, index) => (
+                <div
+                  key={`${p._id}-${index}`}
+                  onClick={() => navigate(`/property/${p._id}`)}
+                  className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden mr-6 w-72 flex-shrink-0 cursor-pointer"
+                >
+                  {/* Real Image */}
+                  <div className="h-40 overflow-hidden">
+                    {p.images && p.images.length > 0 ? (
+                      <img
+                        src={p.images[0].url}
+                        alt={p.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="h-full bg-gray-300 flex items-center justify-center">
+                        No Image
+                      </div>
+                    )}
+                  </div>
 
-      {/* ================= FEATURED PROPERTIES (SLIDER) ================= */}
-<div className="py-16 bg-gray-100">
-  <div className="max-w-6xl mx-auto px-6">
-    <div className="flex justify-between items-center mb-8">
-      <h2 className="text-3xl font-bold">
-        Featured Properties
-      </h2>
-      <button
-        onClick={() => navigate("/buy")}
-        className="text-blue-600 hover:underline"
-      >
-        View All
-      </button>
-    </div>
+                  <div className="p-4">
+                    <span className="inline-block text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mb-2">
+                      {p.type}
+                    </span>
 
-    {/* Slider */}
-    <div className="slider-container">
-      <div className="slider-track">
-        {[...featuredProperties, ...featuredProperties].map((p, index) => (
-          <div
-  key={`${p.id}-${index}`}
-  onClick={() => navigate(`/property/${p.id}`)}
-  className="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden mr-6 w-72 flex-shrink-0 cursor-pointer"
->
-
-            {/* Image Placeholder */}
-            <div className="h-40 bg-gray-300 flex items-center justify-center">
-              <span className="text-gray-600 text-sm">
-                Property Image
-              </span>
-            </div>
-
-            <div className="p-4">
-              <span className="inline-block text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded mb-2">
-                {p.type}
-              </span>
-
-              <h3 className="font-semibold">{p.title}</h3>
-              <p className="text-gray-600 text-sm">{p.location}</p>
-              <p className="text-blue-600 font-bold mt-2">
-                ₹{p.price.toLocaleString()}
-              </p>
+                    <h3 className="font-semibold">{p.title}</h3>
+                    <p className="text-gray-600 text-sm">{p.location}</p>
+                    <p className="text-blue-600 font-bold mt-2">
+                      ₹{p.price.toLocaleString()}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-        ))}
+
+        </div>
       </div>
-    </div>
-  </div>
-</div>
 
       {/* ================= FINAL CTA ================= */}
       <div className="bg-blue-600 text-white py-16 text-center">
@@ -239,6 +210,7 @@ I am interested in your property services.
         <p className="mb-6">
           Post it for FREE and get genuine buyers
         </p>
+
         <button
           onClick={() => navigate("/post")}
           className="bg-white text-blue-600 px-6 py-3 rounded font-semibold hover:bg-gray-100"
