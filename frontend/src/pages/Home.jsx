@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import axios from "axios"
 
 const featuredProperties = [
   {
@@ -41,13 +42,34 @@ const Home = () => {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+// whatsapp feature
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Contact Details:", formData);
-    alert("Thanks! We will contact you soon.");
-    setShowForm(false);
-  };
+  try {
+    // 1️⃣ Save lead in database
+    await axios.post("http://localhost:8000/api/leads", formData);
+
+    // 2️⃣ Create WhatsApp message
+    const message = `
+Hi, I am ${formData.name}.
+I am from ${formData.city}.
+My phone number is ${formData.phone}.
+I am interested in your property services.
+    `;
+
+    const encodedMessage = encodeURIComponent(message);
+
+    // 🔥 REPLACE THIS WITH CLIENT NUMBER
+    const whatsappNumber = "919955813612";
+
+    // 3️⃣ Redirect to WhatsApp
+    window.location.href = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+  } catch (error) {
+    alert("Something went wrong. Please try again.",error);
+  }
+};
 
   return (
     <>
@@ -96,11 +118,18 @@ const Home = () => {
 
                 <input
                   type="tel"
-                  name="phone"
-                  placeholder="Phone Number"
-                  required
-                  className="w-full border p-2 rounded"
-                  onChange={handleChange}
+                    name="phone"
+                    placeholder="Phone Number"
+                    required
+                    pattern="[0-9]{10}"
+                    maxLength="10"
+                    className="w-full border p-2 rounded"
+                    onChange={handleChange}
+                     
+                    onInvalid={(e) =>
+                      e.target.setCustomValidity("Please enter a valid 10 digit number")
+                    }
+                    onInput={(e) => e.target.setCustomValidity("")}
                 />
 
                 <input
