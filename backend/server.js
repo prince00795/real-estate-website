@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const propertyRoutes = require("./routes/propertyRoutes");
 const adminRoutes = require("./routes/adminRoutes");
+const leadRoutes = require("./routes/leadRoutes");
 
 
 const app = express();
@@ -22,6 +23,7 @@ mongoose
 
   app.use("/api/properties", propertyRoutes);
   app.use("/api/admin", adminRoutes);
+  app.use("/api/leads", leadRoutes);
 
 
 // Test Route
