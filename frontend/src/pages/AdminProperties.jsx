@@ -13,7 +13,7 @@ const AdminProperties = () => {
   const loadProperties = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:8000/api/properties"
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties"
       );
       setProperties(res.data.properties);
     } catch (error) {
@@ -29,7 +29,7 @@ const AdminProperties = () => {
 
   try {
     await axios.delete(
-      `http://localhost:8000/api/properties/${id}`,
+      `https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties/${id}`,
       {
         headers: { Authorization: `Bearer ${token}` },
       }

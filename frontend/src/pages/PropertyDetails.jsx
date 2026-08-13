@@ -12,7 +12,7 @@ const PropertyDetails = () => {
     const fetchProperty = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/properties/${id}`
+          `https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties/${id}`
         );
         setProperty(res.data);
       } catch (error) {

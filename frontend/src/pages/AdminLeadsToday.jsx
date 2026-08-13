@@ -11,14 +11,14 @@ const AdminLeadsToday = () => {
       const token = localStorage.getItem("token");
 
       const buyers = await axios.get(
-        "http://localhost:8000/api/leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/leads",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
 
       const sellers = await axios.get(
-        "http://localhost:8000/api/seller-leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/seller-leads",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

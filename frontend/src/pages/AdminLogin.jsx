@@ -13,7 +13,7 @@ const AdminLogin = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/admin/login",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/admin/login",
         { email, password }
       );
 

@@ -15,7 +15,7 @@ const Buy = () => {
     const fetchProperties = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/properties"
+          "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties"
         );
         setProperties(res.data.properties);
       } catch (error) {

@@ -47,7 +47,7 @@ const AdminAddProperty = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/properties",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties",
         data,
         {
           headers: {

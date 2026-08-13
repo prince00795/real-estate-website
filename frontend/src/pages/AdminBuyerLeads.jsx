@@ -11,7 +11,7 @@ const AdminBuyerLeads = () => {
       const token = localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:8000/api/leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/leads",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

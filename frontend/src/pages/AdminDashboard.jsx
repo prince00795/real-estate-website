@@ -29,13 +29,13 @@ const AdminDashboard = () => {
 
       // Properties (public route)
       const properties = await axios.get(
-        "http://localhost:8000/api/properties"
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties"
       );
       setPropertyCount(properties.data.total);
 
       // Buyer Leads (protected)
       const buyers = await axios.get(
-        "http://localhost:8000/api/leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/leads",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
 
       // Seller Leads (protected + correct route)
       const sellers = await axios.get(
-        "http://localhost:8000/api/seller-leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/seller-leads",
         {
           headers: { Authorization: `Bearer ${token}` },
         }

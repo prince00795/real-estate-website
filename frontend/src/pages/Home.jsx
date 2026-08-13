@@ -22,7 +22,7 @@ const Home = () => {
     const fetchProperties = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/properties"
+          "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/properties"
         );
 
         setFeaturedProperties(res.data.properties); // because backend returns { properties: [...] }
@@ -45,7 +45,7 @@ const Home = () => {
 
     try {
       await axios.post(
-        "http://localhost:8000/api/leads",
+        "https://real-estate-backend-bsh6gsbbecfkggc4.centralus-01.azurewebsites.net/api/leads",
         formData
       );
 
